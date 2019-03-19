@@ -12,7 +12,7 @@ namespace PublishAndSubscribe
         public Action OnAlarmRaised { get; set; }
 
         ///Called to raise an alarm
-        public void Raisealarm()
+        public void RaiseAlarm()
         {
             ///Only raise the alarm if someone has subscribed
             //if(OnAlarmRaised != null)
@@ -31,7 +31,7 @@ namespace PublishAndSubscribe
         public event Action OnAlarmRaised = delegate { };
 
         ///Called to raise an alarm
-        public void Raisealarm()
+        public void RaiseAlarm()
         {   /// it is no longer needed to do check for null, it now gets assigned when the instance is created
             OnAlarmRaised();
         }
@@ -44,7 +44,7 @@ namespace PublishAndSubscribe
         public event EventHandler OnAlarmRaised = delegate { };
 
         ///Does not provide any events arguments
-        public void Raisealarm()
+        public void RaiseAlarm()
         {
             Console.WriteLine("we are here: Alarm3");
             ///the event handler receives a reference to the alarm that is raising this event
@@ -55,16 +55,23 @@ namespace PublishAndSubscribe
     class Program
     {
         ///Method that must run when the alarm is raised
-        static void AlarmListner1(object sender, EventArgs e)
+        static void AlarmListner()
         {
-            Console.WriteLine("Alarm listner 1 called");
+            Console.WriteLine("Alarm listner called");
         }
 
         ///Method that must run when the alarm is raised
-        static void AlarmListner2()
+        static void AlarmListner1()
         {
             Console.WriteLine("Alarm listner 2 called");
         }
+
+        ///Method that must run when the alarm is raised
+        static void AlarmListner2(object sender, EventArgs e)
+        {
+            Console.WriteLine("Alarm listner 1 called");
+        }
+        
 
         static void Main(string[] args)
         {
@@ -74,14 +81,17 @@ namespace PublishAndSubscribe
             Alarm3 alarm3 = new Alarm3();
 
             ///subscribe the two listners fist to eventhandler other to Action
-            alarm3.OnAlarmRaised += AlarmListner1;
-            alarm2.OnAlarmRaised += AlarmListner2;
+            alarm.OnAlarmRaised += AlarmListner;
+            alarm2.OnAlarmRaised += AlarmListner1;
+            alarm3.OnAlarmRaised += AlarmListner2;
 
             ///unsubscribe a listner
             //alarm.OnAlarmRaised -= AlarmListner2;
 
             ///raise the alarm
-            alarm.Raisealarm();
+            alarm.RaiseAlarm();
+            alarm2.RaiseAlarm();
+            alarm3.RaiseAlarm();
             Console.WriteLine("Alarm Raised");
             Console.ReadKey();
 
